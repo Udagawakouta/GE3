@@ -960,11 +960,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         input_->Update();
 
         //// 数字の0キーが押されていたら
-        //if (key[DIK_0]) 
-        //{
-        //    OutputDebugStringA("Hit 0\n");  // 出力ウィンドウに「Hit 0」と表示
-        //}
-
+        if (input_->TriggerKey(DIK_0)) 
+        {
+            OutputDebugStringA("Hit 0\n");  // 出力ウィンドウに「Hit 0」と表示
+        }
+       
         // DirectX毎フレーム処理　ここから
         //static float red = 1.0f;
 
