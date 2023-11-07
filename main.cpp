@@ -794,6 +794,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     delete input_;
 
+    delete dxCommon_;
+
     winApp_->Finalize();
     delete winApp_;
 
