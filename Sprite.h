@@ -1,4 +1,6 @@
 #pragma once
+#include "SpriteCommon.h"
+
 class Sprite
 {
 public: // ƒƒ“ƒo•Ï”
