@@ -1,10 +1,23 @@
 #pragma once
-#include "DirectXCommon.h"
+#include <Windows.h>
+
+#include <wrl.h>
+#include <string>
+#include <dxcapi.h>
 
 class SpriteCommon
 {
 public: // ƒƒ“ƒo•Ï”
 	// ‰Šú‰»
-	void Initialize(DirectXCommon*dxCommon_);
+	void Initialize();
+
+private:
+	static IDxcBlob* CompileShader(
+		const std::wstring& filePath,
+		const wchar_t* profile,
+		IDxcUtils* dxcUtils,
+		IDxcCompiler3* dxcCompiler,
+		IDxcIncludeHandler* includeHandler;
+		);
 };
 

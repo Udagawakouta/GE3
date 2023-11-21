@@ -10,8 +10,6 @@
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-#pragma region 基礎システムの初期化
-
 	// input
 	Input* input_ = nullptr;
 	WinApp* winApp_ = nullptr;
@@ -29,20 +27,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	input_ = new Input();
 	input_->Initialize(winApp_);
 
-	SpriteCommon* spriteCommon = nullptr;
-	// スプライト共通部の初期化
-	spriteCommon = new SpriteCommon;
+	// スプライト共通部
+	SpriteCommon* spriteCommon = new SpriteCommon();
 	spriteCommon->Initialize(dxCommon_);
 
-#pragma region 最初のシーンの初期化
-
+	// スプライト
 	Sprite* sprite = new Sprite();
 	sprite->Initialize(spriteCommon);
 
-#pragma endregion 
-
-
-#pragma endregion 
 	// ゲームループ
 	while (true) {
 		// 更新
@@ -60,11 +52,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		dxCommon_->PostDraw();
 	}
 
+	delete sprite;
+	delete spriteCommon;
+
 	delete input_;
 
 	delete dxCommon_;
-
-	delete spriteCommon;
 
 	winApp_->Finalize();
 	delete winApp_;
