@@ -15,9 +15,9 @@ private:
 	static IDxcBlob* CompileShader(
 		const std::wstring& filePath,
 		const wchar_t* profile,
-		IDxcUtils* dxcUtils,
-		IDxcCompiler3* dxcCompiler,
-		IDxcIncludeHandler* includeHandler;
+		IDxcUtils* dxcUils,
+		IDxcCompiler3* dxCompiler,
+		IDxcIncludeHandler* includeHandler
 		);
 };
 

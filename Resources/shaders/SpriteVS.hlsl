@@ -10,7 +10,7 @@ struct VertexShaderInput
 
 VertexShaderOutput main(VertexShaderInput input)
 {
-	VertexShaderOutout output;
+	VertexShaderOutput output;
 	output.position = input.position;
 	return output;
 }
