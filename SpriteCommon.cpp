@@ -5,9 +5,10 @@
 
 using namespace Microsoft::WRL;
 
-void SpriteCommon::Initialize()
+void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 {
 	HRESULT result;
+	dxCommon = dxCommon;
 
 	// DXC初期化
 	ComPtr<IDxcUtils>dxcUils;
@@ -30,17 +31,17 @@ void SpriteCommon::Initialize()
 	// シリアライズしてバイナリにする
 	ID3DBlob* signatureBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr;
-	hr = D3D12SerializeRootSignature(&descriptionRootSignature,
+	result = D3D12SerializeRootSignature(&descriptionRootSignature,
 		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob);
-	if (FAILED(hr)) {
-		Log(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
+	if (FAILED(result)) {
+		// Log(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
 		assert(false);
 	}
 	// バイナリを元に生成
 	ID3D12RootSignature* rootSignature = nullptr;
-	hr = device->CreateRootSignature(0, signatureBlob->GetBufferPointer(),
+	result = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(),
 		signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(result));
 
 	// InputLayout
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
@@ -66,11 +67,11 @@ void SpriteCommon::Initialize()
 
 	// Shaderをコンパイルする
 	IDxcBlob* vertexShaderBlob = CompileShader(L"Object3d.VS.hlsl",
-		L"vs_6_0", dxcUils, dxCompiler, includeHandler);
+		L"vs_6_0", dxcUils.Get(), dxCompiler.Get(), includeHandler.Get());
 	assert(vertexShaderBlob != nullptr);
 
 	IDxcBlob* pixelShaderBlob = CompileShader(L"Object3d.PS.hlsl",
-		L"ps_6_0", dxcUils, dxCompiler, includeHandler);
+		L"ps_6_0", dxcUils.Get(), dxCompiler.Get(), includeHandler.Get());
 	assert(pixelShaderBlob != nullptr);
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
@@ -94,10 +95,10 @@ void SpriteCommon::Initialize()
 
 	// 実際に～
 	ID3D12PipelineState* graphicsPipelineState = nullptr;
-	hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
+	result = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&graphicsPipelineState));
 
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(result));
 }
 
 IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3*idxcCompiler3, IDxcIncludeHandler*includeHandler)
@@ -124,14 +125,14 @@ IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_
 	};
 
 	IDxcResult* shaderResult = nullptr;
-	hr = dxCompiler->Compile(
+	result = idxcCompiler3->Compile(
 		&shaderSourceBuffer,
 		arguments,
 		_countof(arguments),
 		includeHandler,
 		IID_PPV_ARGS(&shaderResult)
 	);
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(result));
 
 	IDxcBlobUtf8* shaderError = nullptr;
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
@@ -140,8 +141,8 @@ IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_
 	}
 
 	IDxcBlob* shaderBlob = nullptr;
-	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
-	assert(SUCCEEDED(hr));
+	result = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
+	assert(SUCCEEDED(result));
 
 	shaderSource->Release();
 	shaderResult->Release();

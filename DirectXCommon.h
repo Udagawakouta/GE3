@@ -44,9 +44,6 @@ private:
 
 	WinApp* winapp = nullptr;
 
-	Comptr<ID3D12Device>device;
-	Comptr<ID3D1Factory> dxgiFactory;
-
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
 	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory;
 

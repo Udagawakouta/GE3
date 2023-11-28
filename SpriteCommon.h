@@ -5,11 +5,13 @@
 #include <string>
 #include <dxcapi.h>
 
+#include "DirectXCommon.h"
+
 class SpriteCommon
 {
 public: // ƒƒ“ƒo•Ï”
 	// ‰Šú‰»
-	void Initialize();
+	void Initialize(DirectXCommon*dxCommon);
 
 private:
 	static IDxcBlob* CompileShader(
@@ -19,5 +21,8 @@ private:
 		IDxcCompiler3* dxCompiler,
 		IDxcIncludeHandler* includeHandler
 		);
+
+public:
+	DirectXCommon* dxCommon_ = nullptr;
 };
 
