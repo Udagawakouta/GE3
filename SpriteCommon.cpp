@@ -8,7 +8,7 @@ using namespace Microsoft::WRL;
 void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 {
 	HRESULT result;
-	dxCommon = dxCommon;
+	dxCommon_ = dxCommon;
 
 	// DXCèâä˙âª
 	ComPtr<IDxcUtils>dxcUils;
@@ -17,7 +17,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 
 	result = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUils));
 	assert(SUCCEEDED(result));
-	result = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxCompiler));
+	result = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxCompiler));
 	assert(SUCCEEDED(result));
 
 	result = dxcUils->CreateDefaultIncludeHandler(& includeHandler);
@@ -44,7 +44,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 	assert(SUCCEEDED(result));
 
 	// InputLayout
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[1] = {};
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
 	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -66,11 +66,11 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	// ShaderÇÉRÉìÉpÉCÉãÇ∑ÇÈ
-	IDxcBlob* vertexShaderBlob = CompileShader(L"Object3d.VS.hlsl",
+	IDxcBlob* vertexShaderBlob = CompileShader(L"Resources/shaders/SpriteVs.hlsl",
 		L"vs_6_0", dxcUils.Get(), dxCompiler.Get(), includeHandler.Get());
 	assert(vertexShaderBlob != nullptr);
 
-	IDxcBlob* pixelShaderBlob = CompileShader(L"Object3d.PS.hlsl",
+	IDxcBlob* pixelShaderBlob = CompileShader(L"Resources/shaders/SpritePs.hlsl",
 		L"ps_6_0", dxcUils.Get(), dxCompiler.Get(), includeHandler.Get());
 	assert(pixelShaderBlob != nullptr);
 
@@ -121,7 +121,7 @@ IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_
 		L"-T",	profile,
 		L"-Zi",	L"-Qembed_debug",
 		L"-Od",
-		L"-Zpr",
+		L"-Zpr"
 	};
 
 	IDxcResult* shaderResult = nullptr;
@@ -148,5 +148,5 @@ IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_
 	shaderResult->Release();
 
 
-	return nullptr;
+	return shaderBlob;
 }
