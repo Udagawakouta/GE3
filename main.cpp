@@ -33,7 +33,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// スプライト
 	Sprite* sprite = new Sprite();
-	sprite->Initialize(spriteCommon);
+	sprite->Initialize(dxCommon_, spriteCommon);
 
 	// ゲームループ
 	while (true) {

@@ -12,6 +12,8 @@ class SpriteCommon
 public: // メンバ変数
 	// 初期化
 	void Initialize(DirectXCommon*dxCommon);
+	// 共通描画設定
+	void DrawSetCommon();
 
 private:
 	static IDxcBlob* CompileShader(
@@ -21,8 +23,15 @@ private:
 		IDxcCompiler3* dxCompiler,
 		IDxcIncludeHandler* includeHandler
 		);
+	// ルートシグネチャの作成
+	void GetRootSignature();
+	// グラフィックスパイプラインの生成
+	void GetPipelineState();
 
+	DirectXCommon* dxCommon_;
 public:
 	DirectXCommon* dxCommon_ = nullptr;
+
+	DirectXCommon* GetDxCommon()const { return dxCommon_; }
 };
 

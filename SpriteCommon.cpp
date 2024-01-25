@@ -10,6 +10,8 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 	HRESULT result;
 	dxCommon_ = dxCommon;
 
+	SpriteCommon* GetPipelineState();
+
 	// DXCèâä˙âª
 	ComPtr<IDxcUtils>dxcUils;
 	ComPtr<IDxcCompiler3>dxCompiler;
@@ -101,6 +103,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 	assert(SUCCEEDED(result));
 }
 
+
 IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3*idxcCompiler3, IDxcIncludeHandler*includeHandler)
 {
 	// hlsl
@@ -149,4 +152,9 @@ IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_
 
 
 	return shaderBlob;
+}
+
+void SpriteCommon::DrawSetCommon()
+{
+
 }
