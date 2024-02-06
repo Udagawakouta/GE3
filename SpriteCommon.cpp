@@ -40,7 +40,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 		assert(false);
 	}
 	// バイナリを元に生成
-	ID3D12RootSignature* rootSignature = nullptr;  //メンバ変数にする	
+	  //メンバ変数にする	
 	result = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(),
 		signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
 	assert(SUCCEEDED(result));
@@ -96,7 +96,6 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 
 	// 実際に～
-	ID3D12PipelineState* graphicsPipelineState = nullptr;
 	result = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&graphicsPipelineState));
 

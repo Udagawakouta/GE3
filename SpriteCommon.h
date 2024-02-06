@@ -16,9 +16,13 @@ public: // メンバ変数
 	void DrawSetCommon();
 
 	// ルートシグネチャの作成
-	ID3D12RootSignature* GetRootSignature();
+	ID3D12RootSignature* GetRootSignature() {
+		return rootSignature;
+	}
 	// グラフィックスパイプラインの生成
-	ID3D12PipelineState* GetPipelineState();
+	ID3D12PipelineState* GetPipelineState() {
+		return graphicsPipelineState;
+	}
 
 private:
 	static IDxcBlob* CompileShader(
@@ -28,8 +32,8 @@ private:
 		IDxcCompiler3* dxCompiler,
 		IDxcIncludeHandler* includeHandler
 		);
-
-	DirectXCommon* dxCommon_;
+	ID3D12RootSignature* rootSignature = nullptr;
+	ID3D12PipelineState* graphicsPipelineState = nullptr;
 public:
 	DirectXCommon* dxCommon_ = nullptr;
 
