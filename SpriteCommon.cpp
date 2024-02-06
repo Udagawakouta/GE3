@@ -40,7 +40,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 		assert(false);
 	}
 	// バイナリを元に生成
-	ID3D12RootSignature* rootSignature = nullptr;
+	ID3D12RootSignature* rootSignature = nullptr;  //メンバ変数にする	
 	result = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(),
 		signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
 	assert(SUCCEEDED(result));

@@ -15,6 +15,11 @@ public: // メンバ変数
 	// 共通描画設定
 	void DrawSetCommon();
 
+	// ルートシグネチャの作成
+	ID3D12RootSignature* GetRootSignature();
+	// グラフィックスパイプラインの生成
+	ID3D12PipelineState* GetPipelineState();
+
 private:
 	static IDxcBlob* CompileShader(
 		const std::wstring& filePath,
@@ -23,10 +28,6 @@ private:
 		IDxcCompiler3* dxCompiler,
 		IDxcIncludeHandler* includeHandler
 		);
-	// ルートシグネチャの作成
-	void GetRootSignature();
-	// グラフィックスパイプラインの生成
-	void GetPipelineState();
 
 	DirectXCommon* dxCommon_;
 public:
