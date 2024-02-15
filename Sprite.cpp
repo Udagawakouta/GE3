@@ -5,13 +5,15 @@
 
 #include "externals/imgui/imgui.h"
 
+#include "TextureManager.h"
+
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
+void Sprite::Initialize(SpriteCommon* common, std::wstring textureFilePath)
 {
 
-	dxCommon_ = dxCommon;
+	dxCommon_ = common_->GetDirectXCommon();
 	common_ = common;
 
 	//‰æ‘œ‚Ì“Ç‚Ýž‚Ý
@@ -70,6 +72,8 @@ void Sprite::Update()
 	vertexData[3].position = { +0.5f,+0.5f,0.0f,1.0f };
 	vertexData[3].texcoord = { 1.0f,0.0f };
 
+	transform.translate = { position.x,position.y,0.0f };
+
 	ImGui::Begin("Texture");
 	ImGui::DragFloat3("Pos", &transform.translate.x, 0.1f);
 
@@ -118,11 +122,6 @@ void Sprite::Draw()
 	//s—ñ‚Ì‘ã“ü
 	*wvpData = worldViewProjectionMatrix;
 
-	//s—ñ‚Ì‘ã“ü
-	// *wvpData = worldMatrix;
-
-
-
 	//UVÀ•W
 	XMMATRIX uvscaleMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&uvTransform.scale));
 	XMMATRIX uvrotateMatrix = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&uvTransform.rotate));
@@ -162,6 +161,11 @@ void Sprite::Draw()
 	dxCommon_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 
 
+}
+
+void Sprite::SetTexture(std::wstring textureFilePath)
+{
+	textureIndex_ = TextureManager::GetInstance()->GetTextureIndexFilePatj(textureFilePath);
 }
 
 void Sprite::CreateVertex()

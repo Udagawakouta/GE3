@@ -7,10 +7,12 @@
 
 using namespace Microsoft::WRL;
 
+const uint32_t DirectXCommon::kMaxSRVCount = 512;
+
 void DirectXCommon::Initialize(WinApp* winApp)
 {
 
-    HRESULT result;
+    //HRESULT result;
     assert(winApp);
 
 

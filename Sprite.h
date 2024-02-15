@@ -43,7 +43,7 @@ private:
 public:
 
 	//èâä˙âª
-	void Initialize(DirectXCommon* dxCommon, SpriteCommon* common);
+	void Initialize(SpriteCommon* common, std::wstring textureFilePath);
 	void Update();
 	void Draw();
 
@@ -59,6 +59,7 @@ public:
 	void SetColor(DirectX::XMFLOAT4 color) { color_ = color; }
 	void SetSize(DirectX::XMFLOAT2 size) { this->size = size; }
 
+	void SetTexture(std::wstring textureFilePath);
 
 private:
 
@@ -107,10 +108,11 @@ private:
 	Transform transform = { {1,1,1},{0,0,0},{0,0,0} };
 	DirectX::XMFLOAT2 position = { 0,0 };
 	float rotation = 0;
-	DirectX::XMFLOAT2 size = { 1,1 };
+	DirectX::XMFLOAT2 size = { 512,512 };
+
+	// âÊëú
+	uint32_t textureIndex_ = 0;
+
 	//ÉJÉÅÉâ
 	Transform cameraTransform = { {1,1,1},{0,0,0},{0,0,-5} };
-
-
-
 };
