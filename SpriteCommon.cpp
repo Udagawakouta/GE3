@@ -168,11 +168,6 @@ DirectX::ScratchImage SpriteCommon::LoadTexture(const std::wstring& filePath)
 
 }
 
-void SpriteCommon::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages)
-{
-	
-}
-
 IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUties, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
 {
 	//hlsl

@@ -28,7 +28,7 @@ public:
 	DirectX::ScratchImage LoadTexture(const std::wstring& filePath);
 
 	//“Ç‚İ‚ñ‚¾‰æ‘œ‚ğGPU‚É‘—‚é
-	 void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+	// void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 
 
 private:

@@ -12,7 +12,7 @@ const uint32_t DirectXCommon::kMaxSRVCount = 512;
 void DirectXCommon::Initialize(WinApp* winApp)
 {
 
-    //HRESULT result;
+    HRESULT result = 0;
     assert(winApp);
 
 
