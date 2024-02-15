@@ -70,36 +70,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         input_->Update();
 
-        //移動
-        /*
-        DirectX::XMFLOAT2 pos = sprite_->GetPosition();
-        pos.x += 0.01f;
-        sprite_->SetPosition(pos);
-
-
-        //回転
-
-        float rot = sprite_->GetRotation();
-        rot += 0.01f;
-        sprite_->SetRotation(rot);
-
-        //色
-        DirectX::XMFLOAT4 color = sprite_->GetColor();
-        color.x -= 0.1f;
-        if (color.x < 0)
-        {
-
-            color.x = 1.0f;
-        }
-        sprite_->SetColor(color);
-
-
-        //サイズ
-        DirectX::XMFLOAT2 size = sprite_->Getize();
-        size.y += 0.01f;
-        sprite_->SetSize(size);
-        */
-
         for (int i = 0; i < 5; i++)
         {
             sprite_[i]->Update();

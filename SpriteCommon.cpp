@@ -150,23 +150,23 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon)
 }
 
 
-DirectX::ScratchImage SpriteCommon::LoadTexture(const std::wstring& filePath)
-{
-
-
-	DirectX::ScratchImage imgae{};
-	HRESULT result = DirectX::LoadFromWICFile(filePath.c_str(), DirectX::WIC_FLAGS_DEFAULT_SRGB, nullptr, imgae);
-
-	DirectX::ScratchImage mipImges{};
-	result = DirectX::GenerateMipMaps(
-		imgae.GetImages(), imgae.GetImageCount(), imgae.GetMetadata(),
-		DirectX::TEX_FILTER_SRGB, 0, mipImges);
-	assert(SUCCEEDED(result));
-
-	return imgae;
-
-
-}
+//DirectX::ScratchImage SpriteCommon::LoadTexture(const std::wstring& filePath)
+//{
+//
+//
+//	DirectX::ScratchImage imgae{};
+//	HRESULT result = DirectX::LoadFromWICFile(filePath.c_str(), DirectX::WIC_FLAGS_DEFAULT_SRGB, nullptr, imgae);
+//
+//	DirectX::ScratchImage mipImges{};
+//	result = DirectX::GenerateMipMaps(
+//		imgae.GetImages(), imgae.GetImageCount(), imgae.GetMetadata(),
+//		DirectX::TEX_FILTER_SRGB, 0, mipImges);
+//	assert(SUCCEEDED(result));
+//
+//	return imgae;
+//
+//
+//}
 
 IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUties, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
 {
