@@ -1,70 +1,101 @@
 #pragma once
 #include <wrl.h>
-#include <d3d12.h>
 #include <dxgi1_6.h>
+#include <d3d12.h>
+
 #include <vector>
-
+#include<chrono>
 #include "WinApp.h"
-
 
 class DirectXCommon
 {
+private:
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+
 public:
-	// 初期化
-	void Initialize(WinApp*winApp);
+
+	void Initialize(WinApp* winApp);
 
 	//描画前処理
 	void PreDraw();
-
 	//描画後処理
 	void PostDraw();
 
+	//Getter
 	ID3D12Device* GetDevice() const { return device.Get(); }
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList.Get(); }
+
+	//スワップチェーン
+	DXGI_SWAP_CHAIN_DESC1 GetswapChainDesc() { return swapChainDesc; };
+
+	//RTVディスク
+	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() { return rtvDesc; }
+
+	//SRV
+	ID3D12DescriptorHeap* GetSrvDescriptorHeaop() { return srvDescriptorHeap.Get(); }
+
 private:
-	// デバイス
+	//デバイス
 	void DeviceInitialize();
-	// コマンド
+	//コマンド
 	void CommandInitialize();
-	// スワップチェーン
+	//スワップチェーン
 	void SwapChainInitialize();
-	// レンダーターゲット
+	//レンダーターゲット
 	void RenderTargetInitialize();
-	// 深度バッファ
-	void DepthBufferInitialize();
-	// フェンス
+
+	void InitializeDepthBuffer();
+	//フェンズ
 	void FenceInitialize();
 
+	//FPS固定初期化処理
+	void InitializeFixFPS();
+	//FPS固定更新処理
+	void UpdateFixFPS();
 
 
+	//ディスクリプターヒープ
+	ID3D12DescriptorHeap* CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescripots, bool shaderVisible);
 
-	
 
 private:
+	WinApp* winApp = nullptr;
 
-	WinApp* winapp = nullptr;
+	ComPtr<ID3D12Device> device;
 
-	Microsoft::WRL::ComPtr<ID3D12Device> device;
-	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory;
+	ComPtr<IDXGIFactory7> dxgiFactory;
 
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>commandAllocator;
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>commandList;
-	Microsoft::WRL::ComPtr<ID3D12CommandQueue>commandQuene;
+	ComPtr<ID3D12CommandAllocator> commandAllocator;
+	ComPtr<ID3D12GraphicsCommandList> commandList;
+	ComPtr<ID3D12CommandQueue> commandQueue;
 
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
-	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> backBuffers;
-
-	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	ComPtr<IDXGISwapChain4> swapChain;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> depthBuff;
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+
+
+	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
+	ComPtr<ID3D12DescriptorHeap> rtvHeap;
+	std::vector<ComPtr<ID3D12Resource>> backBuffers;
+
+
+	ComPtr<ID3D12Resource> depthBuff;
 	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+	ComPtr<ID3D12DescriptorHeap> dsvHeap;
 
-	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+	// フェンスの生成
+	ComPtr<ID3D12Fence> fence;
 	UINT64 fenceVal = 0;
 
 	D3D12_RESOURCE_BARRIER barrierDesc{};
-};
 
+	//記録用の時間計測
+	std::chrono::steady_clock::time_point reference_;
+
+	//ディスクリプターヒープ
+	ComPtr<ID3D12DescriptorHeap>rtvDescriptorHeap;
+	ComPtr<ID3D12DescriptorHeap>srvDescriptorHeap;
+
+
+};

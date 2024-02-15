@@ -1,69 +1,134 @@
-﻿#include "DirectXCommon.h"
-#include "Input.h"
+﻿#include "Input.h"
 #include "WinApp.h"
-
+#include "DirectXCommon.h"
 #include "SpriteCommon.h"
 #include "Sprite.h"
+#include "ImGuiManager.h"
 
-
+#include <vector>
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-	// input
-	Input* input_ = nullptr;
-	WinApp* winApp_ = nullptr;
-	DirectXCommon* dxCommon_ = nullptr;
+    //ポインタ置き場
+    Input* input_ = nullptr;
+    WinApp* winApp_ = nullptr;
+    DirectXCommon* dxCommon_ = nullptr;
+#pragma region WindowsAPI初期化処理
 
-	// WindowsAPI初期化処理
-	winApp_ = new WinApp();
-	winApp_->Initialize();
+    winApp_ = new WinApp();
+    winApp_->Initialize();
 
-	// DirectX初期化処理
-	dxCommon_ = new DirectXCommon();
-	dxCommon_->Initialize(winApp_);
 
-	// Input生成、初期化
-	input_ = new Input();
-	input_->Initialize(winApp_);
+#pragma endregion
 
-	// スプライト共通部
-	SpriteCommon* spriteCommon = new SpriteCommon();
-	spriteCommon->Initialize(dxCommon_);
+#pragma region 
 
-	// スプライト
-	Sprite* sprite = new Sprite();
-	sprite->Initialize(dxCommon_, spriteCommon);
+    dxCommon_ = new DirectXCommon();
+    dxCommon_->Initialize(winApp_);
 
-	// ゲームループ
-	while (true) {
-		// 更新
-		if (winApp_->Update() == true)
-		{
-			break;
-		}
-		//	入力
-		input_->Update();
 
-		// 更新前処理
-		dxCommon_->PreDraw();
+    // DirectX初期化処理　ここまで
+#pragma endregion
 
-		sprite->Draw();
+    input_ = new Input();
+    input_->Initialize(winApp_);
 
-		// 更新後処理
-		dxCommon_->PostDraw();
 
-	}
+    ImGuiManager* imgui = new ImGuiManager();
+    ImGuiManager::Initialize(winApp_->GetHwnd(), dxCommon_);
 
-	delete sprite;
-	delete spriteCommon;
+    SpriteCommon* common = new SpriteCommon();
+    common->Initialize(dxCommon_);
 
-	delete input_;
+    std::vector<Sprite*> sprite_;
+    for (int i = 0; i < 5; i++)
+    {
+        Sprite* temp = new Sprite();
+        temp->Initialize(dxCommon_, common);
+        temp->SetPosition({ (float)i * 1,0 });
+        sprite_.push_back(temp);
+    }
 
-	delete dxCommon_;
+    // ゲームループ
+    while (true) {
 
-	winApp_->Finalize();
-	delete winApp_;
+        //更新
+        if (winApp_->Update() == true)
+        {
+            break;
+        }
 
-	return 0;
+        ImGuiManager::NewFrame();
+        imgui->ShowDemo();
+
+        input_->Update();
+
+        //移動
+        /*
+        DirectX::XMFLOAT2 pos = sprite_->GetPosition();
+        pos.x += 0.01f;
+        sprite_->SetPosition(pos);
+
+
+        //回転
+
+        float rot = sprite_->GetRotation();
+        rot += 0.01f;
+        sprite_->SetRotation(rot);
+
+        //色
+        DirectX::XMFLOAT4 color = sprite_->GetColor();
+        color.x -= 0.1f;
+        if (color.x < 0)
+        {
+
+            color.x = 1.0f;
+        }
+        sprite_->SetColor(color);
+
+
+        //サイズ
+        DirectX::XMFLOAT2 size = sprite_->Getize();
+        size.y += 0.01f;
+        sprite_->SetSize(size);
+        */
+
+        for (int i = 0; i < 5; i++)
+        {
+            sprite_[i]->Update();
+        }
+
+
+
+        //更新後処理
+        ImGuiManager::CreateCommand();
+        dxCommon_->PreDraw();
+
+        for (int i = 0; i < 5; i++)
+        {
+            sprite_[i]->Draw();
+        }
+        //更新前処理
+        ImGuiManager::CommandsExcute(dxCommon_->GetCommandList());
+        dxCommon_->PostDraw();
+
+        // DirectX毎フレーム処理　ここまで
+
+    }
+    for (int i = 0; i < 5; i++)
+    {
+        delete sprite_[i];
+    }
+    delete common;
+
+    delete imgui;
+
+    delete input_;
+    delete dxCommon_;
+    winApp_->Finalize();
+
+    delete winApp_;
+
+    return 0;
 }

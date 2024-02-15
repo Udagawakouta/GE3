@@ -1,42 +1,49 @@
 #pragma once
-#include <Windows.h>
-
 #include <wrl.h>
 #include <string>
 #include <dxcapi.h>
+#include <d3dx12.h>
 
 #include "DirectXCommon.h"
+#include <DirectXTex.h>
 
+
+//共有
 class SpriteCommon
 {
-public: // メンバ変数
-	// 初期化
-	void Initialize(DirectXCommon*dxCommon);
-	// 共通描画設定
-	void DrawSetCommon();
-
-	// ルートシグネチャの作成
-	ID3D12RootSignature* GetRootSignature() {
-		return rootSignature;
-	}
-	// グラフィックスパイプラインの生成
-	ID3D12PipelineState* GetPipelineState() {
-		return graphicsPipelineState;
-	}
 
 private:
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+
+public:
+
+	void Initialize(DirectXCommon* dxCommon);
+
+	//Getter
+	ID3D12RootSignature* GetRootSignature() { return rootSignature.Get(); }
+	ID3D12PipelineState* GetPipelineState() { return pipelineState.Get(); }
+
+
+	//画像読み込み
+	DirectX::ScratchImage LoadTexture(const std::wstring& filePath);
+
+	//読み込んだ画像をGPUに送る
+	void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+
+
+private:
+
+
 	static IDxcBlob* CompileShader(
 		const std::wstring& filePath,
 		const wchar_t* profile,
-		IDxcUtils* dxcUils,
-		IDxcCompiler3* dxCompiler,
-		IDxcIncludeHandler* includeHandler
-		);
-	ID3D12RootSignature* rootSignature = nullptr;
-	ID3D12PipelineState* graphicsPipelineState = nullptr;
-public:
+		IDxcUtils* dxcUties,
+		IDxcCompiler3* dxcCompiler,
+		IDxcIncludeHandler* includeHandler);
+private:
+
 	DirectXCommon* dxCommon_ = nullptr;
+	ComPtr<ID3D12RootSignature> rootSignature;
+	ComPtr<ID3D12PipelineState> pipelineState;
 
-	DirectXCommon* GetDxCommon()const { return dxCommon_; }
 };
-
