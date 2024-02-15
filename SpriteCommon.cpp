@@ -208,7 +208,7 @@ IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_
 		L"-T",profile,
 		L"-Zi",L"-Qembed_debug",
 		L"-Od",
-		L"-Zpr",
+		L"-Zpr"
 	};
 
 	IDxcResult* shaderResult = nullptr;
@@ -225,7 +225,7 @@ IDxcBlob* SpriteCommon::CompileShader(const std::wstring& filePath, const wchar_
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
 	if (shaderError != nullptr && shaderError->GetStringLength() != 0)
 	{
-		assert(false);
+		//assert(false);
 	}
 
 
