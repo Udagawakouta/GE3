@@ -2,13 +2,13 @@
 cbuffer ConstBufferDataMaterial : register(b0)
 {
 	// 色(RGBA)
-	float4 color;
+    float4 color;
 };
 
 // ３Ｄ変換行列
 cbuffer ConstBufferDataTransform : register(b1)
 {
-	matrix mat; // ３Ｄ変換行列
+    matrix mat; // ３Ｄ変換行列
 };
 
 
@@ -17,9 +17,9 @@ cbuffer ConstBufferDataTransform : register(b1)
 struct VSOutput
 {
 	// システム用頂点座標
-	float4 svpos : SV_POSITION;
+    float4 svpos : SV_POSITION;
 	// 法線ベクトル
-	float3 normal :NORMAL;
+    float3 normal : NORMAL;
 	// uv値
-	float2 uv  :TEXCOORD;
+    float2 uv : TEXCOORD;
 };
